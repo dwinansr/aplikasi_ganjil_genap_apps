@@ -123,7 +123,7 @@ def main():
 
         for i, member in enumerate(team_data):
             with locals()[f"col{i % 5 + 1}"]:
-                st.image(member["image_url"], use_column_width='auto', output_format='png', caption=f"{member['name']} {member['IG']}")
+                st.image(member["image_url"], use_column_width='auto', output_format='png', caption=f"{member['name']}")
 
 
         st.header(" ", divider="gray")
