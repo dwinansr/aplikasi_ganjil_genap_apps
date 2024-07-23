@@ -20,22 +20,94 @@ def determine_quality_class(cod_value):
 
 # Streamlit UI
 def main():
-    st.title('Kalkulator Chemical Oxygen Demand (COD)')
+    # Create a sidebar
+    st.sidebar.title('Main Menu')
 
-    st.write('Masukkan Nilai Parameter:')
+    # Add a selectbox to the sidebar
+    select_box = st.sidebar.selectbox('', 
+        ('Home', 'Pengantar', 'Cara Kerja', 'Kalkulator COD')
+    )
 
-    vb = st.number_input('Volume larutan FAS untuk Blanko (mL)', min_value=0.0)
-    vc = st.number_input('Volume larutan FAS untuk Contoh Uji (mL)', min_value=0.0)
-    nfas = st.number_input('Number of equivalent for Sample (FAS)', min_value=0.0)
-    vsample = st.number_input('Volume Contoh Uji (mL)', min_value=0.0)
+    # Display some content based on the selected option
+    if select_box == 'Home':
+        st.write('Perkenalan')
 
-    if st.button('Calculate COD'):
-        cod_result = calculate_cod(vb, vc, nfas, vsample)
-        st.write(f'Nilai Chemical Oxygen Demand sebesar {cod_result:.2f} mg O2/L')
+    elif select_box == 'Pengantar':
+        st.markdown ('# <div style="text-align: center;"> Chemical Oxygen Demand </div>', unsafe_allow_html=True)
+        st.markdown("""
+            COD (Chemical Oxygen Demand) adalah sebuah parameter yang mengukur 
+            jumlah oksigen yang dibutuhkan untuk mengoksidasi senyawa organik 
+            dalam air secara kimia. Penggunaan K2Cr2O7 (kalium dikromat) sebagai 
+            oksidator dalam suasana asam digunakan untuk mengoksidasi materi organik 
+            yang ada dalam sampel air. Hasil dari tes COD menunjukkan jumlah senyawa 
+            organik yang dapat dioksidasi, dan digunakan untuk menilai tingkat 
+            pencemaran air.
 
-        # Determine environmental quality class
-        quality_class = determine_quality_class(cod_result)
-        st.write(f'Hasil dari Kadar COD {quality_class} berdasarkan Baku Mutu Lingkungan (BML)')
+            ### Kelebihan
+            - Memakan waktu ±3 jam, sedangkan BOD5 memakan waktu 5 hari.
+            - Untuk menganalisis COD antara 50-800 mg/l, tidak dibutuhkan pengenceran 
+              sampel, sedangkan BOD5 selalu membutuhkan pengenceran.
+            - Ketelitian dan ketepatan (reprodicibility) tes COD adalah 2-3 kali lebih 
+              tinggi dari tes BOD5.
+            - Gangguan zat yang bersifat racun tidak menjadi masalah.
+
+            ### Kekurangan
+            - Tidak dapat dibedakan antara zat yang tidak teroksidasi dengan zat-zat 
+              yang teroksidasi secara biologis.
+            - Metode ini tidak berlaku bagi contoh uji air yang mengandung ion klorida > 2000 mg/l.
+            - Kadar klorida > 2000 ppm dapat mengganggu hasil tes COD, tapi dapat 
+              dihilangkan dengan penambahan HgSO4.
+                    
+            ### Rumus Perhitungan
+        """)
+        st.image ('img/rumus.png', use_column_width=True)
+
+
+    elif select_box == 'Cara Kerja':
+        st.markdown ('# <div style="text-align: center;"> Cara Kerja COD/KOK </div>', unsafe_allow_html=True)
+
+        st.markdown("""
+            ### Proses Pengukuran COD/KOK:
+
+            1. **Persiapan Sampel:**
+               - Campurkan 2 mL contoh inlet/outlet dengan 2 mL K2Cr2O7 dan 2 mL campuran Ag2SO4 dan H2SO4.
+               - Masukkan campuran ke dalam reaktor dan biarkan selama 1 jam.
+               - Dinginkan dan pindahkan ke dalam Erlenmeyer.
+
+            2. **Titrasi:**
+               - Titrasi dengan larutan FAS* 0,02 N menggunakan indikator feroin.
+               - Tambahkan larutan FAS hingga terjadi perubahan warna dari merah kecoklatan, hijau, biru, dan kembali ke merah kecoklatan.
+
+            3. **Proses Standarisasi:**
+               - Timbang K2Cr2O7 langsung ditabung Erlenmeyer secara duplo.
+               - Tambahkan air sebanyak 25 mL dan 10 mL H2SO4 pekat.
+               - Titrasi dengan larutan FAS 0,02 N dengan indikator feroin.
+
+            *FAS = larutan Ferro Ammonium Sulfat
+
+            ### Catatan:
+            - Pastikan standarisasi dilakukan dengan cermat untuk hasil yang akurat.
+            - Lakukan pengukuran secara berulang untuk meminimalkan kesalahan.
+        """)
+
+    elif select_box == 'Kalkulator COD':
+        st.markdown ('# <div style="text-align: center;"> Kalkulator COD </div>', unsafe_allow_html=True)
+
+        st.subheader('Masukkan Nilai Parameter:')
+
+        vb = st.number_input('Volume larutan FAS untuk Blanko (mL)', min_value=0.0)
+        vc = st.number_input('Volume larutan FAS untuk Contoh Uji (mL)', min_value=0.0)
+        nfas = st.number_input('Number of equivalent for Sample (FAS)', min_value=0.0, format= '%.4f')
+        vsample = st.number_input('Volume Contoh Uji (mL)', min_value=0.0)
+
+        if st.button('Calculate COD'):
+            cod_result = calculate_cod(vb, vc, nfas, vsample)
+            st.success(f'Nilai Chemical Oxygen Demand sebesar {cod_result:.2f} mg O2/L')
+
+            # Determine environmental quality class
+            quality_class = determine_quality_class(cod_result)
+            st.info(f'Hasil dari Kadar COD {quality_class} berdasarkan Baku Mutu Lingkungan (BML)')
 
 if __name__ == '__main__':
     main()
+
