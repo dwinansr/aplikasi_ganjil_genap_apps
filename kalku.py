@@ -107,7 +107,7 @@ def main():
             st.info(f'Hasil dari Kadar COD {quality_class} berdasarkan Baku Mutu Lingkungan (BML)')
 
     if select_box == 'Our Group':
-        st.markdown ('# <div style="text-align: center;"> Kelompok  9 </div>', unsafe_allow_html=True)
+        st.markdown ('## <div style="text-align: center;"> Kelompok  9 </div>', unsafe_allow_html=True)
 
         # Team Members
         team_data = [
