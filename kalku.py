@@ -25,14 +25,11 @@ def main():
 
     # Add a selectbox to the sidebar
     select_box = st.sidebar.selectbox('', 
-        ('Home', 'Pengantar', 'Cara Kerja', 'Kalkulator COD')
+        ('Pengantar', 'Cara Kerja', 'Kalkulator COD', 'Our Group')
     )
 
     # Display some content based on the selected option
-    if select_box == 'Home':
-        st.write('Perkenalan')
-
-    elif select_box == 'Pengantar':
+    if select_box == 'Pengantar':
         st.markdown ('# <div style="text-align: center;"> Chemical Oxygen Demand </div>', unsafe_allow_html=True)
         st.markdown("""
             COD (Chemical Oxygen Demand) adalah sebuah parameter yang mengukur 
@@ -59,6 +56,7 @@ def main():
               dihilangkan dengan penambahan HgSO4.
                     
             ### Rumus Perhitungan
+                    
         """)
         st.image ('img/rumus.png', use_column_width=True)
 
@@ -107,6 +105,31 @@ def main():
             # Determine environmental quality class
             quality_class = determine_quality_class(cod_result)
             st.info(f'Hasil dari Kadar COD {quality_class} berdasarkan Baku Mutu Lingkungan (BML)')
+
+    if select_box == 'Our Group':
+        st.markdown ('# <div style="text-align: center;"> Kelompok  9 </div>', unsafe_allow_html=True)
+
+        # Team Members
+        team_data = [
+            {"name": "Dwi Nanda Sari","image_url": "img/wi.jpg"},
+            {"name": "Elsa Anggraeni", "image_url": "img/eca.jpg"},
+            {"name": "M. Ihsan Taqiyuddin ", "image_url": "img/cicak2.JPG"},
+            {"name": "Rasikah Maharani Liliana Bakti", "image_url": "img/rasi.jpg"},
+            {"name": "Reyhan Riselvi", "image_url": "img/ray.jpg"}
+        ]
+
+        # Display Team Members
+        col1, col2, col3, col4, col5 = st.columns(5)
+
+        for i, member in enumerate(team_data):
+            with locals()[f"col{i % 5 + 1}"]:
+                st.image(member["image_url"], use_column_width='auto', output_format='png', caption=f"{member['name']} {member['IG']}")
+
+
+        st.header(" ", divider="gray")
+        st.caption('<div style="text-align: center; transform: skewX(-20deg);">Powered by Politeknik AKA BOGOR</div>', unsafe_allow_html=True)
+
+
 
 if __name__ == '__main__':
     main()
