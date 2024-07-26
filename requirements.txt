@@ -3,4 +3,4 @@ numpy
 pandas
 pydeck
 streamlit
-streamait_lottie
+streamlit_lottie
