@@ -1,22 +1,40 @@
 import streamlit as st
+import base64
+import requests
+from streamlit_lottie import st_lottie
 
 # Function to calculate Chemical Oxygen Demand (COD)
 def calculate_cod(vb, vc, nfas, vsample):
     cod_value = ((vb - vc) * nfas * 8000) / vsample
     return cod_value
+        
+
+# file json format (File path)
+lottie_url = "https://lottie.host/763d8378-248d-49ea-be0a-e2f54c16261d/JhnKfnqKfV.json"
+
+# Fungsi untuk memproses lottie url
+def load_lottie_url(url):
+    r = requests.get(url)
+    if r.status_code != 200:
+        return None
+    return r.json()
+
+# Memproses animasi lottie
+lottie_json = load_lottie_url(lottie_url)
+
 
 # Function to determine environmental quality class
 def determine_quality_class(cod_value):
     if cod_value >= 0 and cod_value <= 10:
-        return "termasuk Kelas 1"
+        return "memenuhi Baku Mutu Lingkungan (BML) dalam Kelas 1 berdasarkan PP No.22 Tahun 2021. Kelas 1 merupakan air yang peruntukannya dapat digunakan untuk air baku air minum, dan/atau peruntukan lain yang mempersyaratkan mutu air yang sama dengan kegunaan tersebut."
     elif cod_value > 10 and cod_value <= 25:
-        return "termasuk Kelas 2"
+        return "memenuhi Baku Mutu Lingkungan (BML) dalam Kelas 2 berdasarkan PP No.22 Tahun 2021. Kelas 2 merupakan air yang peruntukannya dapat digunakan untuk prasarana/sarana rekreasi air, pembudidayaan ikan air tawar, peternakan, air untuk mengairi pertanaman, dan/atau peruntukan mempersyaratkan mutu air yang sama dengan kegunaan tersebut."
     elif cod_value > 25 and cod_value <= 40:
-        return "termasuk Kelas 3"
+        return "memenuhi Baku Mutu Lingkungan (BML) dalam Kelas 3 berdasarkan PP No.22 Tahun 2021. Kelas 3 merupakan air yang peruntukannya dapat digunakan untuk pembudidayaan ikan air tawar, peternakan, air untuk mengairi tanaman, dan/atau peruntukan lain yang mempersyaratkan mutu air yang sama dengan kegunaan tersebut."
     elif cod_value > 40 and cod_value <= 80:
-        return "termasuk Kelas 4"
+        return "memenuhi Baku Mutu Lingkungan (BML) dalam Kelas 4 berdasarkan PP No.22 Tahun 2021. Kelas 4 merupakan air yang peruntukannya dapat digunakan untuk mengairi pertanaman dan/atau peruntukan lain yang mempersyaratkan mutu air yang sama dengan kegunaan tersebut."
     else:
-        return "tidak termasuk dalam kelas baku mutu yang ditetapkan"
+        return "tidak memenuhi Baku Mutu Lingkungan (BML) yang telah ditetapkan dalam PP No.22 Tahun 2021"
 
 # Streamlit UI
 def main():
@@ -32,7 +50,7 @@ def main():
     if select_box == 'Pengantar':
         st.markdown ('# <div style="text-align: center;"> Chemical Oxygen Demand </div>', unsafe_allow_html=True)
         st.markdown("""
-            COD (Chemical Oxygen Demand) adalah sebuah parameter yang mengukur 
+            :red[COD (Chemical Oxygen Demand)] adalah sebuah parameter yang mengukur 
             jumlah oksigen yang dibutuhkan untuk mengoksidasi senyawa organik 
             dalam air secara kimia. Penggunaan K2Cr2O7 (kalium dikromat) sebagai 
             oksidator dalam suasana asam digunakan untuk mengoksidasi materi organik 
@@ -41,12 +59,11 @@ def main():
             pencemaran air.
 
             ### Kelebihan
-            - Memakan waktu ±3 jam, sedangkan BOD5 memakan waktu 5 hari.
+            - Hanya memakan waktu ±3 jam
             - Untuk menganalisis COD antara 50-800 mg/l, tidak dibutuhkan pengenceran 
-              sampel, sedangkan BOD5 selalu membutuhkan pengenceran.
-            - Ketelitian dan ketepatan (reprodicibility) tes COD adalah 2-3 kali lebih 
-              tinggi dari tes BOD5.
-            - Gangguan zat yang bersifat racun tidak menjadi masalah.
+              sampel.
+            - COD mengukur semua bahan organik yang dapat dioksidasi dalam sampel, termasuk yang tidak dapat diurai oleh mikroorganisme.
+            - Hasil pengukuran COD cenderung konsisten dan dapat diulang dengan hasil yang hampir sama.
 
             ### Kekurangan
             - Tidak dapat dibedakan antara zat yang tidak teroksidasi dengan zat-zat 
@@ -87,6 +104,18 @@ def main():
             - Pastikan standarisasi dilakukan dengan cermat untuk hasil yang akurat.
             - Lakukan pengukuran secara berulang untuk meminimalkan kesalahan.
         """)
+        st.write ("")
+        st.write ("")
+        
+        col1,col2,col3 = st.columns([1,2,1])
+
+    # Menampilkan animasi lottie
+        with col2:
+            if lottie_json is not None:
+                st_lottie(lottie_json)
+            else:
+                st.write("Failed to load Lottie animation.")
+
 
     elif select_box == 'Kalkulator COD':
         st.markdown ('# <div style="text-align: center;"> Kalkulator COD </div>', unsafe_allow_html=True)
@@ -95,26 +124,27 @@ def main():
 
         vb = st.number_input('Volume larutan FAS untuk Blanko (mL)', min_value=0.0)
         vc = st.number_input('Volume larutan FAS untuk Contoh Uji (mL)', min_value=0.0)
-        nfas = st.number_input('Number of equivalent for Sample (FAS)', min_value=0.0, format= '%.4f')
+        nfas = st.number_input('Normalitas FAS', min_value=0.0, format= '%.4f')
         vsample = st.number_input('Volume Contoh Uji (mL)', min_value=0.0)
 
-        if st.button('Calculate COD'):
+        if st.button('Hitung COD'):
             cod_result = calculate_cod(vb, vc, nfas, vsample)
             st.success(f'Nilai Chemical Oxygen Demand sebesar {cod_result:.2f} mg O2/L')
 
             # Determine environmental quality class
             quality_class = determine_quality_class(cod_result)
-            st.info(f'Hasil dari Kadar COD {quality_class} berdasarkan Baku Mutu Lingkungan (BML)')
+            st.info(f'Hasil dari Kadar COD tersebut {quality_class}')
+            st.image('img/tabel.png', use_column_width=True)
 
     if select_box == 'Our Group':
         st.markdown ('## <div style="text-align: center;"> Kelompok  9 </div>', unsafe_allow_html=True)
 
         # Team Members
         team_data = [
-            {"name": "Dwi Nanda Sari","image_url": "img/Wi.jpg"},
+            {"name": "Dwi Nanda Sari","image_url": "img/wi.jpg"},
             {"name": "Elsa Anggraeni", "image_url": "img/eca.jpg"},
             {"name": "M. Ihsan Taqiyuddin ", "image_url": "img/cicak2.JPG"},
-            {"name": "Rasikah Maharani Liliana Bakti", "image_url": "img/rasi.jpg"},
+            {"name": "Rasikhah Maharani Liliana Bakti", "image_url": "img/rasi.jpg"},
             {"name": "Reyhan Riselvi", "image_url": "img/ray.jpg"}
         ]
 
@@ -129,8 +159,21 @@ def main():
         st.header(" ", divider="gray")
         st.caption('<div style="text-align: center; transform: skewX(-20deg);">Powered by Politeknik AKA BOGOR</div>', unsafe_allow_html=True)
 
+def img_to_base64(image_path):
+    """Convert image to base64"""
+    with open(image_path, "rb") as img_file:
+            return base64.b64encode(img_file.read()).decode()
+    
+    # Import gambar & konversi ke base64
+img_path = "img/icon_aka.png"  
+img_base64 = img_to_base64(img_path)
+st.sidebar.markdown(
+    f'<img src="data:image/png;base64,{img_base64}" style="width: 100%; height: auto;">',
+    unsafe_allow_html=True,
+)
 
 
 if __name__ == '__main__':
     main()
+
 
