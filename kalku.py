@@ -159,6 +159,9 @@ def main():
         st.header(" ", divider="gray")
         st.caption('<div style="text-align: center; transform: skewX(-20deg);">Powered by Politeknik AKA BOGOR</div>', unsafe_allow_html=True)
 
+
+if __name__ == '__main__':
+    main()
 def img_to_base64(image_path):
     """Convert image to base64"""
     with open(image_path, "rb") as img_file:
@@ -171,9 +174,5 @@ st.sidebar.markdown(
     f'<img src="data:image/png;base64,{img_base64}" style="width: 100%; height: auto;">',
     unsafe_allow_html=True,
 )
-
-
-if __name__ == '__main__':
-    main()
 
 
