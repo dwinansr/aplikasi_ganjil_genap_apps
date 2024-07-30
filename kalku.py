@@ -36,6 +36,21 @@ def determine_quality_class(cod_value):
     else:
         return "tidak memenuhi Baku Mutu Lingkungan (BML) yang telah ditetapkan dalam PP No.22 Tahun 2021"
 
+    
+def img_to_base64(image_path):
+    """Convert image to base64"""
+    with open(image_path, "rb") as img_file:
+            return base64.b64encode(img_file.read()).decode()
+    
+    # Import gambar & konversi ke base64
+img_path = "img/icon_aka.png"  
+img_base64 = img_to_base64(img_path)
+st.sidebar.markdown(
+    f'<img src="data:image/png;base64,{img_base64}" style="width: 100%; height: auto;">',
+    unsafe_allow_html=True,
+)
+
+
 # Streamlit UI
 def main():
     # Create a sidebar
