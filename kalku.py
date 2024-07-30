@@ -143,6 +143,9 @@ def main():
         vsample = st.number_input('Volume Contoh Uji (mL)', min_value=0.0)
 
         if st.button('Hitung COD'):
+            if vb == 0 or vc == 0 or nfas == 0 or vsample == 0:
+                st.error("Pastikan untuk mengisi semua nilai.")
+            else:
             cod_result = calculate_cod(vb, vc, nfas, vsample)
             st.success(f'Nilai Chemical Oxygen Demand sebesar {cod_result:.2f} mg O2/L')
 
