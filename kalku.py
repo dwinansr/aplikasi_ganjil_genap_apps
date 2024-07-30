@@ -141,7 +141,7 @@ def main():
 
         # Team Members
         team_data = [
-            {"name": "Dwi Nanda Sari","image_url": "img/wi.jpg"},
+            {"name": "Dwi Nanda Sari","image_url": "img/Wi.jpg"},
             {"name": "Elsa Anggraeni", "image_url": "img/eca.jpg"},
             {"name": "M. Ihsan Taqiyuddin ", "image_url": "img/cicak2.JPG"},
             {"name": "Rasikhah Maharani Liliana Bakti", "image_url": "img/rasi.jpg"},
