@@ -146,13 +146,13 @@ def main():
             if vb == 0 or vc == 0 or nfas == 0 or vsample == 0:
                 st.error("Pastikan untuk mengisi semua nilai.")
             else:
-            cod_result = calculate_cod(vb, vc, nfas, vsample)
-            st.success(f'Nilai Chemical Oxygen Demand sebesar {cod_result:.2f} mg O2/L')
-
-            # Determine environmental quality class
-            quality_class = determine_quality_class(cod_result)
-            st.info(f'Hasil dari Kadar COD tersebut {quality_class}')
-            st.image('img/tabel.png', use_column_width=True)
+                cod_result = calculate_cod(vb, vc, nfas, vsample)
+                st.success(f'Nilai Chemical Oxygen Demand sebesar {cod_result:.2f} mg O2/L')
+    
+                # Determine environmental quality class
+                quality_class = determine_quality_class(cod_result)
+                st.info(f'Hasil dari Kadar COD tersebut {quality_class}')
+                st.image('img/tabel.png', use_column_width=True)
 
     if select_box == 'Our Group':
         st.markdown ('## <div style="text-align: center;"> Kelompok  9 </div>', unsafe_allow_html=True)
